@@ -322,12 +322,13 @@ function Splash({ onDone }: { onDone:()=>void }) {
       <div style={{position:'relative',marginBottom:'2rem'}}>
         <div className="spin-slow" style={{position:'absolute',inset:-14,borderRadius:'50%',border:'2px solid transparent',background:'var(--grad) border-box',WebkitMask:'linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0)',WebkitMaskComposite:'destination-out',maskComposite:'exclude'}}/>
         <div style={{position:'absolute',inset:-6,borderRadius:'50%',background:'rgba(124,58,237,.28)',animation:'pulse 2s ease-out infinite'}}/>
-        {/* ── TO ADD YOUR PHOTO: replace the 👤 span below with:
+        {/* ── TO ADD YOUR PHOTO: replace the  👤span below with:
             <img src="/images/dharanidharan.jpg" alt="Dharanidharan R S"
               style={{width:'100%',height:'100%',borderRadius:'50%',objectFit:'cover'}}/>
             then upload your photo to /public/images/dharanidharan.jpg ── */}
         <div style={{width:136,height:136,borderRadius:'50%',background:'var(--grad-pc)',padding:3,boxShadow:'var(--shadow-p)'}}>
-          <div style={{width:'100%',height:'100%',borderRadius:'50%',background:'var(--bg)',display:'grid',placeItems:'center',fontSize:'3.2rem'}}>👤</div>
+          <div style={{width:'100%',height:'100%',borderRadius:'50%',background:'var(--bg)',display:'grid',placeItems:'center',fontSize:'3.2rem'}}><img src="/images/dharanidharan.jpg" alt="Dharanidharan R S"
+  style={{width:'100%',height:'100%',borderRadius:'50%',objectFit:'cover'}}/></div>
         </div>
       </div>
 
