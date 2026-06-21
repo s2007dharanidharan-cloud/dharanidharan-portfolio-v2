@@ -474,8 +474,8 @@ export default function App() {
               <div style={{display:'flex',flexWrap:'wrap',gap:'.75rem',marginBottom:'2.5rem'}}>
                 <a href="#mechanical" className="btn btn-main"><Cog size={16}/> Mechanical Portfolio</a>
                 <a href="#software" className="btn btn-out"><Code2 size={16}/> Software Portfolio</a>
-                <a href="/CV core.pdf" download className="btn btn-gold"><Download size={16}/> Core CV</a>
-                <a href="/CV Software.pdf" download className="btn btn-gold"><Download size={16}/> Software CV</a>
+                <a href="/CV-core.pdf" download className="btn btn-gold"><Download size={16}/> Core CV</a>
+                <a href="/CV-Software.pdf" download className="btn btn-gold"><Download size={16}/> Software CV</a>
                 <a href="#contact" className="btn btn-out" style={{borderColor:'rgba(255,255,255,.2)',color:'rgba(255,255,255,.55)'}}><Mail size={16}/> Contact</a>
               </div>
             </Reveal>
@@ -738,8 +738,8 @@ export default function App() {
                     ))}
                   </div>
                   <div style={{marginTop:'1.5rem',display:'flex',gap:'.75rem',flexWrap:'wrap'}}>
-                    <a href="/CV core.pdf" download className="btn btn-main" style={{fontSize:'.82rem'}}><Download size={14}/> Core CV</a>
-                    <a href="/CV Software.pdf" download className="btn btn-out" style={{fontSize:'.82rem'}}><Download size={14}/> Software CV</a>
+                    <a href="/CV-core.pdf" download className="btn btn-main" style={{fontSize:'.82rem'}}><Download size={14}/> Core CV</a>
+                    <a href="/CV-Software.pdf" download className="btn btn-out" style={{fontSize:'.82rem'}}><Download size={14}/> Software CV</a>
                   </div>
                   <div style={{marginTop:'1.25rem',display:'flex',alignItems:'center',gap:'.5rem',fontSize:'.82rem',color:'rgba(255,255,255,.32)'}}>
                     <MapPin size={14} style={{color:'var(--purple-l)'}}/> Erode, Tamil Nadu · India
@@ -802,7 +802,7 @@ export default function App() {
                   onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor='rgba(255,255,255,.1)';(e.currentTarget as HTMLElement).style.color='rgba(255,255,255,.48)'}}
                 ><l.icon size={16}/></a>
               ))}
-              <a href="/CV core.pdf" download className="btn btn-main" style={{fontSize:'.8rem',padding:'.5rem 1rem'}}><Download size={14}/> Resume</a>
+              <a href="/CV-core.pdf" download className="btn btn-main" style={{fontSize:'.8rem',padding:'.5rem 1rem'}}><Download size={14}/> Resume</a>
             </div>
           </div>
           <div style={{borderTop:'1px solid rgba(255,255,255,.04)'}}>
