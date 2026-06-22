@@ -720,7 +720,7 @@ export default function App() {
                   <div style={{display:'flex',flexDirection:'column',gap:'.75rem'}}>
                     {[
                       {href:'mailto:s2007dharanidharan@gmail.com',icon:Mail,label:'Email',value:'s2007dharanidharan@gmail.com',color:'var(--purple)'},
-                      {href:'https://www.linkedin.com/in/dharanidharan-R-S',icon:Linkedin,label:'LinkedIn',value:'dharanidharan-R-S',color:'var(--cyan)'},
+                      {href:'https://www.linkedin.com/in/dharanidharan-r-s-a92612337',icon:Linkedin,label:'LinkedIn',value:'dharanidharan-R-S',color:'var(--cyan)'},
                       {href:'https://github.com/s2007dharanidharan-cloud',icon:Github,label:'GitHub',value:'s2007dharanidharan-cloud',color:'var(--gold)'},
                     ].map(l=>(
                       <a key={l.label} href={l.href} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:'.875rem',padding:'.75rem 1rem',borderRadius:'.75rem',border:'1px solid rgba(255,255,255,.06)',background:'rgba(255,255,255,.02)',transition:'all .25s'}}
@@ -796,7 +796,7 @@ export default function App() {
               <p style={{marginTop:'.5rem',fontSize:'.78rem',color:'rgba(255,255,255,.28)'}}>Built with React + Vite · Designed with precision.</p>
             </div>
             <div style={{display:'flex',alignItems:'center',gap:'.625rem'}}>
-              {[{href:'mailto:s2007dharanidharan@gmail.com',icon:Mail,label:'Email'},{href:'https://github.com/s2007dharanidharan-cloud',icon:Github,label:'GitHub'},{href:'https://www.linkedin.com/in/dharanidharan-R-S',icon:Linkedin,label:'LinkedIn'}].map(l=>(
+              {[{href:'mailto:s2007dharanidharan@gmail.com',icon:Mail,label:'Email'},{href:'https://github.com/s2007dharanidharan-cloud',icon:Github,label:'GitHub'},{href:'https://www.linkedin.com/in/dharanidharan-r-s-a92612337',icon:Linkedin,label:'LinkedIn'}].map(l=>(
                 <a key={l.label} href={l.href} target="_blank" rel="noreferrer" aria-label={l.label} style={{width:40,height:40,borderRadius:'50%',border:'1px solid rgba(255,255,255,.1)',display:'grid',placeItems:'center',color:'rgba(255,255,255,.48)',transition:'all .25s'}}
                   onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderColor='var(--cyan)';(e.currentTarget as HTMLElement).style.color='var(--cyan-l)'}}
                   onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor='rgba(255,255,255,.1)';(e.currentTarget as HTMLElement).style.color='rgba(255,255,255,.48)'}}
