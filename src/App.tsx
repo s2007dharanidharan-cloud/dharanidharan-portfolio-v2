@@ -5,6 +5,7 @@ import {
   Layers, Boxes, Hammer, Database, Globe, Sparkles, ChevronRight,
   Menu, X, ArrowUp, Sun, Moon, ArrowRight, Zap,
 } from 'lucide-react'
+import Engine3D from './components/Engine3D'
 
 /* ── TYPING TEXT ── */
 const PHRASES = ['Mechanical Engineer', 'CAD Designer', 'Full Stack Developer', 'Problem Solver']
@@ -141,11 +142,9 @@ function Splash({ onDone }) {
       animation: phase==='out' ? 'splashOut .4s ease forwards' : 'splashIn .3s ease forwards',
       overflow:'hidden',
     }}>
-      {/* Ambient orbs */}
       <div style={{ position:'absolute', width:520, height:520, borderRadius:'50%', background:'rgba(124,58,237,0.14)', filter:'blur(110px)', top:'-18%', left:'-8%', pointerEvents:'none' }}/>
       <div style={{ position:'absolute', width:420, height:420, borderRadius:'50%', background:'rgba(8,145,178,0.09)', filter:'blur(90px)', bottom:'-15%', right:'-5%', pointerEvents:'none' }}/>
 
-      {/* LEFT — full-bleed photo (hidden on short/narrow screens, see media queries) */}
       <div className="splash-photo" style={{ position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', inset:0, background:'linear-gradient(to right,transparent 50%,#07050F 100%)', zIndex:2, pointerEvents:'none' }}/>
         <div style={{ position:'absolute', bottom:0, left:0, right:0, height:'30%', background:'linear-gradient(to top,#07050F,transparent)', zIndex:2, pointerEvents:'none' }}/>
@@ -160,7 +159,6 @@ function Splash({ onDone }) {
             img.parentElement.innerHTML += `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.75rem;color:rgba(255,255,255,.3)"><span style="font-size:6rem">👤</span><span style="font-size:.68rem;font-family:monospace;letter-spacing:.1em;text-align:center;padding:0 2rem">Upload dharanidharan.jpg<br/>to /public/images/</span></div>`
           }}
         />
-        {/* Name — bottom-left over photo */}
         <div style={{ position:'absolute', bottom:0, left:0, zIndex:3, padding:'2rem 2rem 1.75rem' }}>
           <h2 style={{ fontSize:'clamp(1.6rem,3.4vw,2.6rem)', fontWeight:900, color:'#fff', lineHeight:1.08, letterSpacing:'-0.03em', textShadow:'0 2px 40px rgba(0,0,0,.75)', margin:0 }}>
             Dharanidharan{' '}
@@ -169,20 +167,17 @@ function Splash({ onDone }) {
         </div>
       </div>
 
-      {/* RIGHT — intro panel */}
       <div className="splash-panel" style={{
         display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'flex-start',
         padding:'clamp(1rem,3vh,2rem) clamp(1.25rem,3vw,2.4rem)',
         position:'relative', zIndex:3, gap:'clamp(.6rem,1.6vh,1.25rem)',
         height:'100%', overflow:'hidden',
       }}>
-        {/* Badge */}
         <div style={{ display:'inline-flex', alignItems:'center', gap:'.5rem', background:'rgba(124,58,237,0.14)', border:'1px solid rgba(124,58,237,0.4)', borderRadius:9999, padding:'.36rem .9rem' }}>
           <span style={{ width:7, height:7, borderRadius:'50%', background:'#22D3EE', boxShadow:'0 0 8px #22D3EE', display:'inline-block' }}/>
           <span style={{ fontSize:'.66rem', fontFamily:'var(--ff-mono)', color:'#22D3EE', letterSpacing:'.22em', fontWeight:700 }}>PORTFOLIO</span>
         </div>
 
-        {/* Big headline */}
         <div>
           <p style={{ fontSize:'clamp(2rem,4vw,3rem)', fontWeight:900, lineHeight:1.18, letterSpacing:'-0.025em', margin:0 }}>
             <span style={{ background:'linear-gradient(135deg,#A78BFA,#22D3EE)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>Turning Ideas</span>
@@ -193,13 +188,11 @@ function Splash({ onDone }) {
             <span style={{ background:'linear-gradient(135deg,#22D3EE,#FCD34D)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>Design &amp; Code</span>
             <span style={{ display:'inline-block', marginLeft:'.3rem' }}>🚀</span>
           </p>
-          {/* Short intro */}
           <p style={{ marginTop:'.6rem', fontSize:'clamp(1rem,1.6vw,1.2rem)', color:'rgba(255,255,255,.55)', lineHeight:1.55, fontWeight:400, maxWidth:360 }}>
             Mechanical Engineering student passionate about CAD Design, Product Development &amp; Software Technology.
           </p>
         </div>
 
-        {/* Role pills */}
         <div style={{ display:'flex', flexDirection:'column', gap:'.45rem', width:'100%', maxWidth:320 }}>
           {[
             { icon:'⚙️', label:'Mechanical Engineer', bg:'rgba(124,58,237,0.18)', border:'rgba(124,58,237,0.45)', text:'#A78BFA' },
@@ -213,7 +206,6 @@ function Splash({ onDone }) {
           ))}
         </div>
 
-        {/* Gear-train loading indicator */}
         <div style={{ display:'flex', alignItems:'center', gap:'1.1rem', marginTop:'.1rem' }}>
           <div className="gear-rig">
             <svg className="gear gear-big" viewBox="0 0 100 100" width="56" height="56">
@@ -245,38 +237,19 @@ function Splash({ onDone }) {
       </div>
 
       <style>{`
-        .gear-rig{
-          position:relative;
-          width:56px; height:56px;
-          flex-shrink:0;
-        }
-        .gear{
-          position:absolute;
-          filter: drop-shadow(0 2px 10px rgba(124,58,237,0.35));
-          transform-origin: 50% 50%;
-        }
-        .gear-big{
-          top:0; left:0;
-          animation: spinCW 2.6s linear infinite;
-        }
-        .gear-small{
-          top:30px; left:30px;
-          animation: spinCCW 1.7s linear infinite;
-        }
+        .gear-rig{ position:relative; width:56px; height:56px; flex-shrink:0; }
+        .gear{ position:absolute; filter: drop-shadow(0 2px 10px rgba(124,58,237,0.35)); transform-origin: 50% 50%; }
+        .gear-big{ top:0; left:0; animation: spinCW 2.6s linear infinite; }
+        .gear-small{ top:30px; left:30px; animation: spinCCW 1.7s linear infinite; }
         @keyframes spinCW{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
         @keyframes spinCCW{ from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
-
         .splash-photo{ display:block; }
-
         @media(max-width:640px){
           div[style*="gridTemplateColumns"]{ grid-template-columns:1fr!important; }
           .splash-photo{ display:none; }
           .splash-panel{ padding:1.25rem 1.5rem!important; justify-content:center!important; }
         }
-
-        @media(max-height:680px){
-          .splash-panel{ gap:.5rem!important; }
-        }
+        @media(max-height:680px){ .splash-panel{ gap:.5rem!important; } }
         @media(max-height:560px){
           .splash-photo{ display:none; }
           div[style*="gridTemplateColumns"]{ grid-template-columns:1fr!important; }
@@ -522,82 +495,97 @@ export default function App() {
         <BackToTop/>
 
         {/* ═══ HERO ═══ */}
-        <section style={{position:'relative',minHeight:'100vh',display:'flex',alignItems:'center',paddingTop:100,paddingBottom:80,overflow:'hidden'}}>
+        <section className="hero-split" style={{
+          position: 'relative',
+          minHeight: '100vh',
+          display: 'grid',
+          gridTemplateColumns: '63fr 37fr',
+          alignItems: 'stretch',
+          paddingTop: 0,
+          overflow: 'hidden',
+        }}>
           <div className="grid-bg" style={{position:'absolute',inset:0,opacity:.5,maskImage:'radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent)',WebkitMaskImage:'radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent)'}}/>
           <Particles/>
           <div className="orb" style={{width:700,height:700,background:'rgba(124,58,237,0.1)',top:'-25%',left:'-15%'}}/>
           <div className="orb" style={{width:500,height:500,background:'rgba(8,145,178,0.08)',bottom:'-15%',right:'-10%'}}/>
 
-          <div className="container" style={{position:'relative',zIndex:1,width:'100%'}}>
-            <div style={{display:'grid',gridTemplateColumns:'1fr auto',gap:'4rem',alignItems:'center'}}>
-              <div>
-                <Reveal>
-                  <div style={{display:'inline-flex',alignItems:'center',gap:'.5rem',background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:9999,padding:'.4rem 1rem',marginBottom:'1.5rem'}}>
-                    <span style={{width:8,height:8,borderRadius:'50%',background:'#10B981',boxShadow:'0 0 8px #10B981',display:'inline-block'}}/>
-                    <span style={{fontSize:'.68rem',fontFamily:'var(--ff-mono)',letterSpacing:'.2em',color:'#10B981',fontWeight:700}}>OPEN FOR INTERNSHIPS · 2026</span>
-                  </div>
-                </Reveal>
-                <Reveal delay={80}>
-                  <h1 style={{fontSize:'clamp(3rem,7vw,5.5rem)',fontWeight:900,lineHeight:1.0,letterSpacing:'-.03em',marginBottom:'1.25rem',color:'var(--text)'}}>
-                    Dharanidharan<br/><span className="tg">R S</span>
-                  </h1>
-                </Reveal>
-                <Reveal delay={160}>
-                  <div style={{fontSize:'1.15rem',marginBottom:'1.25rem',minHeight:'1.8rem'}}><TypingText/></div>
-                </Reveal>
-                <Reveal delay={240}>
-                  <p style={{fontSize:'1.05rem',color:'var(--text-2)',lineHeight:1.8,maxWidth:560,marginBottom:'2.5rem'}}>
-                    Bridging <span style={{color:'var(--purple)',fontWeight:600}}>mechanical innovation</span> and{' '}
-                    <span style={{color:'var(--cyan)',fontWeight:600}}>software engineering</span> to build the future — from CAD-modelled turbines to MERN-stack platforms.
-                  </p>
-                </Reveal>
-                <Reveal delay={320}>
-                  <div style={{display:'flex',flexWrap:'wrap',gap:'.75rem',marginBottom:'3rem'}}>
-                    <a href="#mechanical" className="btn btn-main"><Cog size={16}/> Mechanical Work</a>
-                    <a href="#software" className="btn btn-out"><Code2 size={16}/> Software Work</a>
-                    <a href="/CV-core.pdf" download className="btn btn-ghost"><Download size={16}/> Core CV</a>
-                    <a href="/CV-Software.pdf" download className="btn btn-ghost"><Download size={16}/> Software CV</a>
-                    <a href="#contact" className="btn btn-ghost"><Mail size={16}/> Contact</a>
-                  </div>
-                </Reveal>
-                <Reveal delay={400}>
-                  <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem',maxWidth:380}}>
-                    {[{n:8.78,s:'CGPA',sfx:'',color:'var(--purple)'},{n:7,s:'Projects',sfx:'+',color:'var(--cyan)'},{n:5,s:'Awards',sfx:'',color:'var(--gold)'}].map(m=>(
-                      <div key={m.s} className="stat-card">
-                        <div style={{fontSize:'1.8rem',fontWeight:800,fontFamily:'var(--ff-mono)',color:m.color}}><Counter to={m.n} suffix={m.sfx}/></div>
-                        <div style={{fontSize:'.65rem',textTransform:'uppercase',letterSpacing:'.15em',color:'var(--text-3)',marginTop:'.3rem',fontWeight:600}}>{m.s}</div>
-                      </div>
-                    ))}
-                  </div>
-                </Reveal>
+          {/* LEFT — text */}
+          <div style={{
+            position: 'relative', zIndex: 1,
+            display: 'flex', flexDirection: 'column', justifyContent: 'center',
+            padding: 'clamp(5rem,10vh,8rem) clamp(1.5rem,4vw,3rem) clamp(3rem,6vh,5rem)',
+          }}>
+            <Reveal>
+              <div style={{display:'inline-flex',alignItems:'center',gap:'.5rem',background:'var(--surface2)',border:'1px solid var(--border)',borderRadius:9999,padding:'.4rem 1rem',marginBottom:'1.5rem'}}>
+                <span style={{width:8,height:8,borderRadius:'50%',background:'#10B981',boxShadow:'0 0 8px #10B981',display:'inline-block'}}/>
+                <span style={{fontSize:'.68rem',fontFamily:'var(--ff-mono)',letterSpacing:'.2em',color:'#10B981',fontWeight:700}}>OPEN FOR INTERNSHIPS · 2026</span>
               </div>
-
-              {/* Hero visual */}
-              <Reveal delay={200} style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-                <div className="hide-mobile" style={{position:'relative',width:300,height:300}}>
-                  <div className="spin-slow" style={{position:'absolute',inset:0,borderRadius:'50%',border:'1.5px solid rgba(124,58,237,0.2)'}}/>
-                  <div className="spin-r" style={{position:'absolute',inset:20,borderRadius:'50%',border:'1.5px solid rgba(8,145,178,0.2)'}}/>
-                  <div className="spin-slow" style={{position:'absolute',inset:40,borderRadius:'50%',border:'1.5px solid rgba(217,119,6,0.2)'}}/>
-                  <div style={{position:'absolute',inset:0,display:'grid',placeItems:'center'}}>
-                    <div style={{width:160,height:160,borderRadius:'50%',background:'var(--grad)',padding:3,boxShadow:'0 0 60px rgba(124,58,237,0.3)'}}>
-                      <div style={{width:'100%',height:'100%',borderRadius:'50%',background:'var(--surface)',display:'grid',placeItems:'center'}}>
-                        <div style={{textAlign:'center'}}>
-                          <div style={{fontSize:'2.5rem',fontWeight:900,lineHeight:1}} className="tg">D</div>
-                          <div style={{fontSize:'.6rem',fontFamily:'var(--ff-mono)',color:'var(--text-3)',letterSpacing:'.1em',marginTop:'.25rem'}}>ENGINEER</div>
-                        </div>
-                      </div>
-                    </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <h1 style={{fontSize:'clamp(2.8rem,5.5vw,5rem)',fontWeight:900,lineHeight:1.0,letterSpacing:'-.03em',marginBottom:'1.25rem',color:'var(--text)'}}>
+                Dharanidharan<br/><span className="tg">R S</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={160}>
+              <div style={{fontSize:'1.15rem',marginBottom:'1.25rem',minHeight:'1.8rem'}}><TypingText/></div>
+            </Reveal>
+            <Reveal delay={240}>
+              <p style={{fontSize:'1rem',color:'var(--text-2)',lineHeight:1.8,maxWidth:500,marginBottom:'2.5rem'}}>
+                Bridging <span style={{color:'var(--purple)',fontWeight:600}}>mechanical innovation</span> and{' '}
+                <span style={{color:'var(--cyan)',fontWeight:600}}>software engineering</span> to build the future — from CAD-modelled turbines to MERN-stack platforms.
+              </p>
+            </Reveal>
+            <Reveal delay={320}>
+              <div style={{display:'flex',flexWrap:'wrap',gap:'.75rem',marginBottom:'2.5rem'}}>
+                <a href="#mechanical" className="btn btn-main"><Cog size={16}/> Mechanical Work</a>
+                <a href="#software" className="btn btn-out"><Code2 size={16}/> Software Work</a>
+                <a href="/CV-core.pdf" download className="btn btn-ghost"><Download size={16}/> Core CV</a>
+                <a href="/CV-Software.pdf" download className="btn btn-ghost"><Download size={16}/> Software CV</a>
+                <a href="#contact" className="btn btn-ghost"><Mail size={16}/> Contact</a>
+              </div>
+            </Reveal>
+            <Reveal delay={400}>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1rem',maxWidth:360}}>
+                {[{n:8.78,s:'CGPA',sfx:'',color:'var(--purple)'},{n:7,s:'Projects',sfx:'+',color:'var(--cyan)'},{n:5,s:'Awards',sfx:'',color:'var(--gold)'}].map(m=>(
+                  <div key={m.s} className="stat-card">
+                    <div style={{fontSize:'1.8rem',fontWeight:800,fontFamily:'var(--ff-mono)',color:m.color}}><Counter to={m.n} suffix={m.sfx}/></div>
+                    <div style={{fontSize:'.65rem',textTransform:'uppercase',letterSpacing:'.15em',color:'var(--text-3)',marginTop:'.3rem',fontWeight:600}}>{m.s}</div>
                   </div>
-                  {[{Icon:Cog,top:'5%',left:'5%',c:'var(--purple)'},{Icon:Code2,top:'5%',right:'5%',c:'var(--cyan)'},{Icon:Cpu,bottom:'5%',left:'5%',c:'var(--gold)'},{Icon:Zap,bottom:'5%',right:'5%',c:'var(--purple)'}].map(({Icon,c,...pos},i)=>(
-                    <div key={i} style={{position:'absolute',...pos,width:42,height:42,borderRadius:'.75rem',background:'var(--surface)',border:'1px solid var(--border)',display:'grid',placeItems:'center',color:c,boxShadow:'var(--shadow-md)',animation:`floatY ${5+i}s ease-in-out ${i*0.5}s infinite`}}>
-                      <Icon size={18}/>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+
+          {/* RIGHT — Engine fills the entire right half, full height */}
+          <div style={{
+            position: 'relative',
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'stretch',
+          }}>
+            {/* Subtle left-edge glow separator */}
+            <div style={{
+              position: 'absolute', left: 0, top: '8%', bottom: '8%', width: 1,
+              background: 'linear-gradient(to bottom, transparent, rgba(124,58,237,0.5), rgba(8,145,178,0.4), transparent)',
+              pointerEvents: 'none', zIndex: 2,
+            }}/>
+            <div style={{ flex: 1, position: 'relative' }}>
+              <Engine3D />
             </div>
           </div>
         </section>
+
+        <style>{`
+          @media (max-width: 900px) {
+            .hero-split {
+              grid-template-columns: 1fr !important;
+              min-height: auto !important;
+            }
+            .hero-split > div:last-child {
+              min-height: 50vh !important;
+            }
+          }
+        `}</style>
 
         {/* ═══ ABOUT ═══ */}
         <section id="about" className="section">
@@ -779,7 +767,7 @@ export default function App() {
             <SH eyebrow="Achievements" title="Recognition & Wins" grad="tgcg"/>
             <div className="grid-3">
               {ACHV.map((a,i)=>{
-                const c=ACHV_C[a.color]; const Icon=a.icon
+                const c = ACHV_C[a.color as keyof typeof ACHV_C]; const Icon = a.icon
                 return(
                   <Reveal key={a.title} delay={i*60}>
                     <div className="card" style={{padding:'1.75rem',height:'100%',position:'relative',overflow:'hidden'}}
@@ -901,4 +889,3 @@ export default function App() {
     </>
   )
 }
-
