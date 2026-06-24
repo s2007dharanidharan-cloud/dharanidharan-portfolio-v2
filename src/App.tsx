@@ -495,7 +495,7 @@ export default function App() {
         <BackToTop/>
 
         {/* ═══ HERO ═══ */}
-        <section className="hero-split" style={{
+        <section style={{
           position: 'relative',
           minHeight: '100vh',
           display: 'grid',
@@ -574,18 +574,6 @@ export default function App() {
             </div>
           </div>
         </section>
-
-        <style>{`
-          @media (max-width: 900px) {
-            .hero-split {
-              grid-template-columns: 1fr !important;
-              min-height: auto !important;
-            }
-            .hero-split > div:last-child {
-              min-height: 50vh !important;
-            }
-          }
-        `}</style>
 
         {/* ═══ ABOUT ═══ */}
         <section id="about" className="section">
