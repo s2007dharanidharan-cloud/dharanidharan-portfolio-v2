@@ -261,7 +261,7 @@ function Splash({ onDone }) {
 }
 
 /* ── NAVBAR ── */
-const NAV = [{href:'#about',label:'About'},{href:'#mechanical',label:'Mechanical'},{href:'#software',label:'Software'},{href:'#timeline',label:'Journey'},{href:'#education',label:'Education'},{href:'#achievements',label:'Awards'},{href:'#contact',label:'Contact'}]
+const NAV = [{href:'#about',label:'About'},{href:'#mechanical',label:'Mechanical'},{href:'#software',label:'Software'},{href:'#education',label:'Education'},{href:'#achievements',label:'Awards'},{href:'#contact',label:'Contact'}]
 function Navbar({ dark, setDark }) {
   const [scrolled, setScrolled] = useState(false); const [open, setOpen] = useState(false)
   useEffect(() => { const fn=()=>setScrolled(window.scrollY>32); fn(); window.addEventListener('scroll',fn); return()=>window.removeEventListener('scroll',fn) },[])
@@ -382,14 +382,18 @@ function PCard({ p, i }) {
 
 /* ── SKILL BAR ── */
 function SBar({ name, level, delay=0 }) {
-  return(
+  const tier = level >= 88 ? { label:'Expert', color:'var(--cyan)', border:'var(--cyan)' }
+             : level >= 80 ? { label:'Advanced', color:'var(--purple)', border:'var(--purple)' }
+             :               { label:'Proficient', color:'var(--gold)', border:'var(--gold)' }
+  return (
     <Reveal delay={delay}>
-      <div>
-        <div style={{display:'flex',justifyContent:'space-between',marginBottom:'.4rem'}}>
-          <span style={{fontSize:'.86rem',fontWeight:500,color:'var(--text)'}}>{name}</span>
-          <span style={{fontSize:'.72rem',fontFamily:'var(--ff-mono)',color:'var(--purple)',fontWeight:700}}>{level}%</span>
-        </div>
-        <div className="sbar-track"><div className="sbar-fill" style={{width:`${level}%`}}/></div>
+      <div style={{
+        display:'flex', flexDirection:'column', gap:4,
+        padding:'10px 12px', background:'var(--surface2)',
+        borderRadius:8, borderLeft:`2px solid ${tier.border}`,
+      }}>
+        <span style={{fontSize:'.86rem', fontWeight:500, color:'var(--text)'}}>{name}</span>
+        <span style={{fontSize:'.68rem', color:tier.color, textTransform:'uppercase', letterSpacing:'.08em', fontWeight:700}}>{tier.label}</span>
       </div>
     </Reveal>
   )
@@ -397,15 +401,15 @@ function SBar({ name, level, delay=0 }) {
 
 /* ── SKILL GROUP ── */
 function SGroup({ g }) {
-  const Icon=g.icon
-  return(
+  const Icon = g.icon
+  return (
     <div className="card" style={{padding:'1.5rem'}}>
-      <div style={{display:'flex',alignItems:'center',gap:'.75rem',marginBottom:'1.25rem'}}>
-        <span style={{width:42,height:42,borderRadius:'.75rem',background:'var(--surface2)',border:'1px solid var(--border)',display:'grid',placeItems:'center',color:'var(--purple)'}}><Icon size={19}/></span>
-        <span style={{fontWeight:700,fontSize:'.95rem',color:'var(--text)'}}>{g.group}</span>
+      <div style={{display:'flex', alignItems:'center', gap:'.75rem', marginBottom:'1.25rem'}}>
+        <span style={{width:42, height:42, borderRadius:'.75rem', background:'var(--surface2)', border:'1px solid var(--border)', display:'grid', placeItems:'center', color:'var(--purple)'}}><Icon size={19}/></span>
+        <span style={{fontWeight:700, fontSize:'.95rem', color:'var(--text)'}}>{g.group}</span>
       </div>
-      <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
-        {g.items.map((it,i)=><SBar key={it.name} {...it} delay={i*40}/>)}
+      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:8}}>
+        {g.items.map((it, i) => <SBar key={it.name} {...it} delay={i*40}/>)}
       </div>
     </div>
   )
@@ -443,15 +447,6 @@ const CERTS = [
   {title:'EV Design and Simulation using MATLAB',org:'Coursera'},
   {title:'CNC Programming',org:'Industry'},
   {title:'ProSimulator Certification',org:'ProSim'},
-]
-const JOURNEY = [
-  {step:'01',title:'Programming Fundamentals',desc:'Core logic, problem decomposition and algorithmic thinking.'},
-  {step:'02',title:'Java & OOP',desc:'Built strong object-oriented foundations with Java.'},
-  {step:'03',title:'Data Structures & Algorithms',desc:'Sharpened problem-solving with arrays, trees, graphs, DP.'},
-  {step:'04',title:'Web Development',desc:'Mastered HTML, CSS and JavaScript fundamentals.'},
-  {step:'05',title:'MERN Stack',desc:'Full stack: MongoDB, Express, React, Node end-to-end.'},
-  {step:'06',title:'Full Stack Applications',desc:'Shipped Series House and ATM Application to production.'},
-  {step:'Now',title:'Advanced Development',desc:'System design, modern tooling and open-source contributions.'},
 ]
 const EDU = [
   {school:'Kongu Engineering College',degree:'B.E. — Mechanical Engineering',period:'2024 – 2028',score:'CGPA 8.78 / 10.0',icon:'🎓'},
@@ -696,30 +691,6 @@ export default function App() {
             <div className="grid-2" style={{marginBottom:'4rem'}}>{SOFT.map((p,i)=><PCard key={p.title} p={p} i={i}/>)}</div>
             <Reveal><h3 className="tgpc" style={{fontWeight:800,fontSize:'1.6rem',marginBottom:'1.5rem'}}>Software Skills</h3></Reveal>
             <div className="grid-skills">{SSKILLS.map(g=><SGroup key={g.group} g={g}/>)}</div>
-          </div>
-        </section>
-
-        {/* ═══ TIMELINE ═══ */}
-        <section id="timeline" className="section">
-          <div className="container">
-            <SH eyebrow="Coding Journey" title="From Hello World to Full Stack" grad="tgcg"/>
-            <div style={{position:'relative',maxWidth:720,margin:'0 auto'}}>
-              <div style={{position:'absolute',left:'1.1rem',top:0,bottom:0,width:2,background:'linear-gradient(to bottom,var(--purple),var(--cyan),var(--gold))',borderRadius:999,opacity:.4}}/>
-              <div style={{display:'flex',flexDirection:'column',gap:'1.25rem'}}>
-                {JOURNEY.map((s,i)=>(
-                  <Reveal key={s.title} delay={i*60}>
-                    <div style={{display:'flex',gap:'2rem',alignItems:'flex-start'}}>
-                      <div className="t-dot" style={{marginLeft:'.45rem'}}/>
-                      <div className="card" style={{padding:'1.25rem 1.5rem',flex:1}}>
-                        <span style={{fontSize:'.68rem',fontFamily:'var(--ff-mono)',color:'var(--cyan)',letterSpacing:'.15em',fontWeight:700}}>{s.step}</span>
-                        <h4 style={{fontWeight:700,fontSize:'1rem',marginTop:'.2rem',color:'var(--text)'}}>{s.title}</h4>
-                        <p style={{fontSize:'.86rem',color:'var(--text-2)',marginTop:'.35rem',lineHeight:1.65}}>{s.desc}</p>
-                      </div>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
