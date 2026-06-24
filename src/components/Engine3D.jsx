@@ -225,11 +225,11 @@ export default function Engine3D() {
 
  <Canvas
   shadows
-  camera={{ position: [0, 0, 800], fov: 45 }}
+  camera={{ position: [0, 400, 6000], fov: 28, near: 1, far: 15000 }}
   gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
   style={{ background: 'transparent', width: '100%', height: '100%' }}
   dpr={[1, 1.5]}
- /* onCreated={({ camera, scene: s }) => {
+  onCreated={({ camera, scene: s }) => {
     setTimeout(() => {
       const b = new THREE.Box3().setFromObject(s)
       if (!b.isEmpty()) {
@@ -242,7 +242,8 @@ export default function Engine3D() {
         camera.updateProjectionMatrix()
       }
     }, 100)
-  }} */
+  }}
+>
 >
         <ambientLight intensity={1.1} />
         <directionalLight position={[400, 600, 350]} intensity={2.4} castShadow color="#fff8f0" />
