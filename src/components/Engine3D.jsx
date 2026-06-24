@@ -244,7 +244,6 @@ export default function Engine3D() {
     }, 100)
   }}
 >
->
         <ambientLight intensity={1.1} />
         <directionalLight position={[400, 600, 350]} intensity={2.4} castShadow color="#fff8f0" />
         <directionalLight position={[-350, 250, -300]} intensity={1.1} color="#e0eeff" />
