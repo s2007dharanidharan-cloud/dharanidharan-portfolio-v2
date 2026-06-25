@@ -38,6 +38,14 @@
   --radius-sm: 0.5rem;
   --radius-lg: 1.5rem;
   --radius-xl: 2rem;
+
+  /* ── Splash cursor integration ──
+     Reuses the theme's gold tokens so the WebGL fluid trail
+     stays in sync with light/dark mode instead of using a
+     separate hardcoded orange. See splash-cursor.js CONFIG_VARS. */
+  --cursor-color-1: var(--gold);
+  --cursor-color-2: var(--gold-l);
+  --cursor-blend: multiply;
 }
 
 /* Dark mode */
@@ -62,6 +70,10 @@ body.dark {
   --shadow-md: 0 4px 20px rgba(0,0,0,0.5), 0 2px 16px rgba(192,132,252,0.22);
   --shadow-lg: 0 8px 36px rgba(0,0,0,0.6), 0 4px 24px rgba(192,132,252,0.30);
   --shadow-xl: 0 20px 64px rgba(0,0,0,0.7), 0 8px 36px rgba(192,132,252,0.35);
+
+  /* On dark backgrounds "multiply" would darken/disappear the trail,
+     so dark mode switches the blend to "screen" to keep it visible. */
+  --cursor-blend: screen;
 }
 
 html { scroll-behavior: smooth; }
@@ -92,6 +104,8 @@ input, textarea { font-family: inherit; }
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  position: relative;
+  z-index: 1;
 }
 .card:hover {
   border-color: var(--border-h);
@@ -105,6 +119,8 @@ input, textarea { font-family: inherit; }
   padding: 0.75rem 1.75rem; border-radius: 9999px; border: none;
   font-family: var(--ff-display); font-weight: 700; font-size: 0.9rem;
   cursor: pointer; transition: all 0.3s; white-space: nowrap; text-decoration: none;
+  position: relative;
+  z-index: 1;
 }
 .btn-main {
   background: var(--purple);
@@ -145,12 +161,14 @@ input, textarea { font-family: inherit; }
   display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem 1.25rem;
   border-radius: 0.75rem; border: 1px solid rgba(217,119,6,0.2);
   background: rgba(217,119,6,0.04); transition: all 0.3s;
+  position: relative;
+  z-index: 1;
 }
 body.dark .cert { background: rgba(252,211,77,0.04); border-color: rgba(252,211,77,0.15); }
 .cert:hover { border-color: var(--gold); transform: translateX(4px); box-shadow: var(--shadow-md); }
 
 /* ── Project image ── */
-.pimg { position: relative; overflow: hidden; border-radius: 0.75rem; aspect-ratio: 16/9; background: var(--bg2); border: 1px solid var(--border); }
+.pimg { position: relative; overflow: hidden; border-radius: 0.75rem; aspect-ratio: 16/9; background: var(--bg2); border: 1px solid var(--border); z-index: 1; }
 .pimg img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
 .pimg:hover img { transform: scale(1.05); }
 .pimg-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%); }
@@ -192,6 +210,8 @@ body.dark .cert { background: rgba(252,211,77,0.04); border-color: rgba(252,211,
     linear-gradient(90deg, rgba(124,58,237,0.06) 1px, transparent 1px);
   background-size: 48px 48px;
   animation: gridMove 25s linear infinite;
+  position: relative;
+  z-index: 0;
 }
 
 /* ── Navbar ── */
@@ -200,6 +220,8 @@ body.dark .cert { background: rgba(252,211,77,0.04); border-color: rgba(252,211,
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
+  position: sticky;
+  z-index: 100;
 }
 body.dark .nav-scroll {
   background: rgba(26, 5, 51, 0.92);  /* matches --bg instead of near-black */
@@ -209,7 +231,7 @@ body.dark .nav-scroll {
 /* ── Utility ── */
 .mono { font-family: var(--ff-mono); }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-.section { padding: 7rem 0; position: relative; }
+.section { padding: 7rem 0; position: relative; z-index: 1; }
 
 /* ── Grids ── */
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 1.5rem; }
@@ -225,6 +247,8 @@ body.dark .nav-scroll {
   text-align: center;
   box-shadow: var(--shadow-sm);
   transition: all 0.3s;
+  position: relative;
+  z-index: 1;
 }
 .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--border-h); }
 
@@ -254,16 +278,53 @@ body.dark .nav-scroll {
   font-size: 0.9rem;
   outline: none;
   transition: all 0.25s;
+  position: relative;
+  z-index: 1;
 }
 .inp:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
 .inp::placeholder { color: var(--text-3); }
 
-/* ── Orb ── */
-.orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; }
+/* ── Orb ──
+   Pinned to z-index 0 so it always sits behind regular content
+   AND behind the splash-cursor canvas — otherwise the blurred
+   orbs and the orange fluid trail visually compete in the same
+   layer and the cursor effect gets muddied. */
+.orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+
+/* ──────────────────────────────────────────────────────────
+   Z-INDEX MAP — keep this in sync with index.html
+   ------------------------------------------------------------
+   0          .orb / .grid-bg   (background decoration)
+   1          .card, .btn, .cert, .pimg, .stat-card, .inp,
+              .section          (normal content layer)
+   100        .nav-scroll       (sticky navbar)
+   999998     #splash-cursor-canvas   (WebGL fluid trail)
+   999999     #custom-cursor          (cursor image)
+   ------------------------------------------------------------
+   Anything new should stay below 999998. If a modal, toast, or
+   dropdown ever needs to appear above the cursor layers, that's
+   almost always a sign to fix that component's z-index rather
+   than raise this ceiling.
+   ────────────────────────────────────────────────────────── */
+
+/* ── Splash cursor compatibility ──
+   Targets the canvas/img defined in index.html so this stylesheet
+   is the single source of truth for how the cursor layers blend
+   with the page underneath, instead of splitting that logic
+   between two files. */
+#splash-cursor-canvas {
+  mix-blend-mode: var(--cursor-blend);
+}
+#custom-cursor {
+  mix-blend-mode: normal; /* the cursor glyph itself should stay crisp, unblended */
+}
 
 /* ── Responsive ── */
 @media(max-width:768px){
   .section { padding: 4rem 0; }
   .hide-mobile { display: none !important; }
+  /* Fluid sim is GPU-heavy; ease off on mobile so it doesn't fight
+     for frame budget with scroll/animations. Actual resolution/force
+     tuning lives in splash-cursor.js (DYE_RESOLUTION, SPLAT_FORCE). */
+  #splash-cursor-canvas { opacity: 0.7; }
 }
-

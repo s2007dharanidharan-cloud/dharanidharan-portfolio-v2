@@ -234,7 +234,7 @@ export default function Engine3D() {
     >
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse at 55% 50%, rgba(26,86,204,0.10) 0%, rgba(8,145,178,0.05) 50%, transparent 80%)',
+        background: 'radial-gradient(ellipse at 55% 50%, rgba(255,255,255,0.08) 0%, rgba(200,210,255,0.05) 50%, transparent 80%)',
         pointerEvents: 'none', borderRadius: 16,
       }} />
 
@@ -242,7 +242,7 @@ export default function Engine3D() {
   shadows
   camera={{ position: [0, 400, 6000], fov: 28, near: 1, far: 15000 }}
   gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-  style={{ background: 'transparent', width: '100%', height: '100%' }}
+  style={{ background: 'rgba(255,255,255,0.04)', width: '100%', height: '100%' }}
   dpr={[1, 1.5]}
 >
         <ambientLight intensity={1.1} />

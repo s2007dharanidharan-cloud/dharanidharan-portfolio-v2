@@ -8,9 +8,50 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/theme.css" />
+ 
+    <style>
+      * { cursor: none !important; }
+      #custom-cursor {
+        position: fixed;
+        top: 0; left: 0;
+        width: 48px; height: 48px;
+        pointer-events: none;
+        z-index: 999999;
+        transform: translate(-2px, -2px);
+      }
+      #splash-cursor-canvas {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        pointer-events: none;
+        z-index: 999998;
+      }
+    </style>
   </head>
+ 
   <body>
+ 
+    <!-- Custom animated cursor -->
+    <img id="custom-cursor" src="/images/geared-copper-cursor.gif" alt="" />
+ 
+    <!-- WebGL fluid "splash" canvas (mild orange, theme-linked) -->
+    <canvas id="splash-cursor-canvas"></canvas>
+ 
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+ 
+    <!-- Custom cursor position tracking (kept separate from the fluid sim) -->
+    <script>
+      const cursorImg = document.getElementById('custom-cursor');
+      window.addEventListener('mousemove', (e) => {
+        cursorImg.style.left = e.clientX + 'px';
+        cursorImg.style.top = e.clientY + 'px';
+      });
+    </script>
+ 
+    <!-- Mild orange splash cursor (WebGL fluid sim) -->
+    <script src="/src/splash-cursor.js"></script>
+ 
   </body>
 </html>
