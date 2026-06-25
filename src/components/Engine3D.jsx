@@ -230,7 +230,7 @@ export default function Engine3D() {
   style={{ background: 'transparent', width: '100%', height: '100%' }}
   dpr={[1, 1.5]}
   onCreated={({ camera, scene: s }) => {
-    setTimeout(() => {
+    const attempt = (tries) => {
       const b = new THREE.Box3().setFromObject(s)
       if (!b.isEmpty()) {
         const sz = b.getSize(new THREE.Vector3())
@@ -238,10 +238,14 @@ export default function Engine3D() {
         const d = Math.max(sz.x, sz.y, sz.z)
         camera.position.set(c.x + d * 0.3, c.y + d * 0.2, c.z + d * 2.8)
         camera.lookAt(c)
-        camera.near = d * 0.001; camera.far = d * 25
+        camera.near = d * 0.001
+        camera.far = d * 25
         camera.updateProjectionMatrix()
+      } else if (tries > 0) {
+        setTimeout(() => attempt(tries - 1), 300)
       }
-    }, 100)
+    }
+    setTimeout(() => attempt(20), 200)
   }}
 >
         <ambientLight intensity={1.1} />
