@@ -112,6 +112,7 @@ const FALLBACK = '#909898'
 function RealEngine({ explodeT }) {
   const { scene } = useGLTF('/models/engine.glb')
   const groupRef = useRef()
+  const fitted = useRef(false)
 
   const prepared = useMemo(() => {
     const clone = scene.clone(true)
@@ -168,7 +169,21 @@ function RealEngine({ explodeT }) {
     return { object: clone, meshEntries }
   }, [scene])
 
-  useFrame((_, delta) => {
+  useFrame(({ camera }, delta) => {
+    if (!fitted.current && groupRef.current) {
+      const b = new THREE.Box3().setFromObject(groupRef.current)
+      if (!b.isEmpty()) {
+        const sz = b.getSize(new THREE.Vector3())
+        const c = b.getCenter(new THREE.Vector3())
+        const d = Math.max(sz.x, sz.y, sz.z)
+        camera.position.set(c.x + d * 0.3, c.y + d * 0.2, c.z + d * 2.8)
+        camera.lookAt(c)
+        camera.near = d * 0.001
+        camera.far = d * 25
+        camera.updateProjectionMatrix()
+        fitted.current = true
+      }
+    }
     if (groupRef.current) groupRef.current.rotation.y += delta * 0.10
     prepared.meshEntries.forEach(mesh => {
       const offset = mesh.userData.dir.clone().multiplyScalar(explodeT * mesh.userData.dist)
@@ -229,24 +244,6 @@ export default function Engine3D() {
   gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
   style={{ background: 'transparent', width: '100%', height: '100%' }}
   dpr={[1, 1.5]}
-  onCreated={({ camera, scene: s }) => {
-    const attempt = (tries) => {
-      const b = new THREE.Box3().setFromObject(s)
-      if (!b.isEmpty()) {
-        const sz = b.getSize(new THREE.Vector3())
-        const c = b.getCenter(new THREE.Vector3())
-        const d = Math.max(sz.x, sz.y, sz.z)
-        camera.position.set(c.x + d * 0.3, c.y + d * 0.2, c.z + d * 2.8)
-        camera.lookAt(c)
-        camera.near = d * 0.001
-        camera.far = d * 25
-        camera.updateProjectionMatrix()
-      } else if (tries > 0) {
-        setTimeout(() => attempt(tries - 1), 300)
-      }
-    }
-    setTimeout(() => attempt(20), 200)
-  }}
 >
         <ambientLight intensity={1.1} />
         <directionalLight position={[400, 600, 350]} intensity={2.4} castShadow color="#fff8f0" />
