@@ -43,9 +43,13 @@
      Reuses the theme's gold tokens so the WebGL fluid trail
      stays in sync with light/dark mode instead of using a
      separate hardcoded orange. See splash-cursor.js CONFIG_VARS. */
-  --cursor-color-1: var(--gold);
-  --cursor-color-2: var(--gold-l);
-  --cursor-blend: multiply;
+  /* ── Splash cursor integration ──
+     The actual color cycling palette lives in splash-cursor.js (PALETTE array:
+     violet, cyan, pink, gold, deep purple). These two tokens are kept as a
+     fallback/reference pair only, matching the palette's general character. */
+  --cursor-color-1: var(--purple-l);
+  --cursor-color-2: var(--cyan-l);
+  --cursor-blend: screen;
 }
 
 /* Dark mode */

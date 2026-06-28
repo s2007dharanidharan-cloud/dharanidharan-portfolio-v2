@@ -10,26 +10,26 @@
   // ---- Config (tweak these to taste) ----------------------
   const config = {
     SIM_RESOLUTION: 128,
-    DYE_RESOLUTION: 1024,        // lowered from 1440 for perf headroom
+    DYE_RESOLUTION: 1440,         // matches React Bits default exactly (higher GPU cost — see note below)
     CAPTURE_RESOLUTION: 512,
-    DENSITY_DISSIPATION: 5.5,    // lowered from 11 — longer visible trail; brightness cap below still prevents glow buildup
-    VELOCITY_DISSIPATION: 2.5,   // lowered from 4.5 — motion carries a bit further before settling
+    DENSITY_DISSIPATION: 3.5,    // matches React Bits default
+    VELOCITY_DISSIPATION: 2,     // matches React Bits default
     PRESSURE: 0.1,
     PRESSURE_ITERATIONS: 20,
-    CURL: 2,                     // gentle swirl only
-    SPLAT_RADIUS: 0.12,          // smaller footprint per movement — less overlap/accumulation
-    SPLAT_FORCE: 1500,           // calmer reaction to movement
+    CURL: 3,                     // matches React Bits default — gives the long sinuous swirl shapes
+    SPLAT_RADIUS: 0.2,           // matches React Bits default
+    SPLAT_FORCE: 6000,           // matches React Bits default
     SHADING: true,
-    COLOR_UPDATE_SPEED: 6,
+    COLOR_UPDATE_SPEED: 10,      // matches React Bits default
     PAUSED: false,
     BACK_COLOR: { r: 0, g: 0, b: 0 },
     TRANSPARENT: true,
 
     // ---- Color behavior ----
-    RAINBOW_MODE: false,         // false = use fixed palette below
-    COLOR: '#E08A3C',            // base mild orange (used if PALETTE has 1 entry)
-    PALETTE: ['#E08A3C', '#D9974A', '#EFAE6E', '#C97F3B'], // soft orange variants
-    INTENSITY: 0.18              // 0–1, scales how strong/bright the dye is — lowered further to prevent bright buildup
+    RAINBOW_MODE: true,          // matches React Bits default — full hue cycling is what gives the teal/magenta/blue/rust look
+    COLOR: '#A78BFA',
+    PALETTE: ['#A78BFA', '#22D3EE', '#F472B6', '#FBBF24', '#7C3AED'],
+    INTENSITY: 0.15              // low — this is what makes it read as dim, translucent smoke rather than vivid neon, matching the reference
   };
 
   function pointerPrototype() {
@@ -242,7 +242,7 @@
         float dy = length(tc) - length(bc);
         vec3 n = normalize(vec3(dx, dy, length(texelSize)));
         vec3 l = vec3(0.0, 0.0, 1.0);
-        float diffuse = clamp(dot(n, l) + 0.85, 0.85, 0.97);
+        float diffuse = clamp(dot(n, l) + 0.7, 0.7, 1.0);
         c *= diffuse;
       #endif
       // Hard ceiling on brightness so overlapping splats (e.g. small jitters
@@ -673,7 +673,7 @@
   function clickSplat(pointer) {
     const color = generateColor();
     // Milder click multiplier than the original (was *10) — keeps it gentle
-    color.r *= 2.5; color.g *= 2.5; color.b *= 2.5;
+    color.r *= 10.0; color.g *= 10.0; color.b *= 10.0;
     let dx = 10 * (Math.random() - 0.5);
     let dy = 30 * (Math.random() - 0.5);
     splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
@@ -808,48 +808,11 @@
 
   // ---- Event wiring ----------------------------------------
   let firstMouseMoveHandled = false;
-  let lastClientX = window.innerWidth / 2;
-  let lastClientY = window.innerHeight / 2;
-  let tailDirX = -0.7;   // default heading: assume cursor points up-left, tail trails down-right
-  let tailDirY = -0.7;
-
-  // How far behind the cursor (in CSS pixels) the splash should originate.
-  // Higher = splash visibly trails further behind the tip.
-  const TAIL_OFFSET = 55;
 
   function handleMouseMove(e) {
     let pointer = pointers[0];
-
-    // Compute movement direction so we can push the splat origin
-    // backward (toward the tail), not at the literal pointer tip.
-    const dxRaw = e.clientX - lastClientX;
-    const dyRaw = e.clientY - lastClientY;
-    const moveLen = Math.sqrt(dxRaw * dxRaw + dyRaw * dyRaw);
-
-    // Only update the heading when there's enough real movement to trust it.
-    // Otherwise keep the previous direction frozen — without this guard,
-    // tailDirX/Y decays toward (0,0) as soon as the cursor slows down,
-    // which snaps the splat origin back onto the tip exactly when you'd
-    // notice it most (i.e. while nearly still).
-    if (moveLen > 0.5) {
-      const nx = dxRaw / moveLen;
-      const ny = dyRaw / moveLen;
-      tailDirX = tailDirX * 0.75 + nx * 0.25;
-      tailDirY = tailDirY * 0.75 + ny * 0.25;
-      // Re-normalize so the smoothed vector stays unit length
-      // (otherwise repeated blending shrinks the offset over time).
-      const dirLen = Math.sqrt(tailDirX * tailDirX + tailDirY * tailDirY) || 1;
-      tailDirX /= dirLen;
-      tailDirY /= dirLen;
-    }
-    lastClientX = e.clientX;
-    lastClientY = e.clientY;
-
-    const tailX = e.clientX - tailDirX * TAIL_OFFSET;
-    const tailY = e.clientY - tailDirY * TAIL_OFFSET;
-
-    let posX = scaleByPixelRatio(tailX);
-    let posY = scaleByPixelRatio(tailY);
+    let posX = scaleByPixelRatio(e.clientX);
+    let posY = scaleByPixelRatio(e.clientY);
     if (!firstMouseMoveHandled) {
       let color = generateColor();
       updatePointerMoveData(pointer, posX, posY, color);
@@ -861,10 +824,8 @@
 
   function handleMouseDown(e) {
     let pointer = pointers[0];
-    const tailX = e.clientX - tailDirX * TAIL_OFFSET;
-    const tailY = e.clientY - tailDirY * TAIL_OFFSET;
-    let posX = scaleByPixelRatio(tailX);
-    let posY = scaleByPixelRatio(tailY);
+    let posX = scaleByPixelRatio(e.clientX);
+    let posY = scaleByPixelRatio(e.clientY);
     updatePointerDownData(pointer, -1, posX, posY);
     clickSplat(pointer);
   }
